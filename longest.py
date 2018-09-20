@@ -22,8 +22,6 @@ def find_longest(intvect):
         max_so_far = curr_count
     return intvect[max_pos:max_pos+max_so_far]
 
-x = [8, 42, 40, 45, 46, 44, 43, 50, 49]
-
 def check_ascending(lst):
 	for i in range(len(lst) - 1):
 		if (lst[i] > lst[i+1]):
@@ -80,6 +78,8 @@ def sort(lst):
 		return merge(first_half, second_half)
 
 def mergesort(lst):
-	return sort(lst)[1]
+	longest_list = sort(lst)[1]
+	num_days = len(longest_list)
+	return (longest_list, num_days)
 	
 
