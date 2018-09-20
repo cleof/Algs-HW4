@@ -1,39 +1,3 @@
-
-# def find_longest(lst):
-# 	print("list: " + str(lst))
-# 	if (len(lst)) == 0 or (len(lst)) == 1: return lst
-# 	start = 0
-# 	end = 1
-# 	max_val = 1
-# 	max_values = []
-# 	for i in range(len(lst) - 1):
-# 		print("max vals in loop: " + str(max_values))
-# 		print(lst[i])
-# 		if lst[i] <= lst[i+1]:
-# 			print(str(lst[i]) + " vs. " + str(lst[i+1]))
-# 			max_val+=1
-# 			end+=1
-# 			print("end: " + str(end))
-# 			if (i+1) == len(lst):
-# 				max_values.append((max_val, start, end))
-# 				start = i+1
-# 				end = i+2
-# 		else:
-# 			max_values.append((max_val, start, end))
-# 			max_val = 0
-# 			start = i+1
-# 			end = i+2
-# 	val = 0
-# 	s = 0
-# 	e = 0
-# 	print("max vals: " + str(max_values))
-# 	for m, begin, terminate in max_values:
-# 		if (m > val):
-# 			val = m
-# 			s = begin
-# 			e = terminate
-# 	print("longest: " + str(lst[s:e]))
-# 	return lst[s:e]
 def find_longest(intvect):
     max_so_far = 0
     curr_count = 1
@@ -44,7 +8,7 @@ def find_longest(intvect):
         if counter1 == 0:
             pass
         #case where we have an increase
-        elif intvect[counter1] > intvect[counter1-1]:
+        elif intvect[counter1] >= intvect[counter1-1]:
             curr_count += 1
         #case where we dont have an increase
         else:
@@ -67,39 +31,29 @@ def check_ascending(lst):
 	return True
 
 def longest_left(lst):
-	if len(lst) == 1: return lst
-	end = 0
-	for i in range(len(lst)-1):
-		if lst[i] <= lst[i+1]:
-			end = i+2
-	return lst[:end]
+	if (len(lst) == 0) or (len(lst) == 1): 
+		return lst
+	index = 0
+	while (index < (len(lst) - 1)) and (lst[index] <= lst[index+1]):
+		index+=1
+	return lst[:index+1]
 
 def longest_right(lst):
-	if len(lst) == 1: return lst
-	start = len(lst) - 1
-	while start >= 0: 
-		if (lst[start] >= lst[start-1]):
-			start = start - 1
-		else:
-			return lst[start:]
+	if len(lst) == 0 or len(lst) == 1: return lst
+	index = len(lst) - 1
+	while (index > 0) and (lst[index - 1] <= lst[index]): 
+		index -= 1
+	return lst[index:]
 
-# def merge((a, l1, lr1, ll1),(b, l2, lr2, ll2)): # what happens when there is only 1 list (1 leave)
 def merge(x, y):
-	if x == [] and y == []: 
-		return print("yikes")
-	if x == []: 
-		return (y, y, y, y)
-	elif y == []: 
-		return (x, x, x, x)
-	a = x
-	l1 = find_longest(a)
-	lr1 = longest_right(a)
-	ll1 = longest_left(a)
-	b = y
-	l2 = find_longest(b)
-	lr2 = longest_right(b)
-	ll2 = longest_left(b)
-	c = a + b
+	l1 = x[1]
+	lr1 = x[2]
+	ll1 = x[3]
+	l2 = y[1]
+	lr2 = y[2]
+	ll2 = y[3]
+
+	c = x[0] + y[0]
 	test = lr1 + ll2 # middle ascending list
 	test = find_longest(test)
 	if len(l1) > len(l2):
@@ -110,34 +64,22 @@ def merge(x, y):
 		longest = test
 	new_lr = longest_right(c)
 	new_ll = longest_left(c)
-
 	return(c, longest, new_lr, new_ll)
 
-# g = (x[0:5])
-# y = (x[5:8])
-# print("merge g and y: " + str(merge(g,y)))
-# find_longest(x[0:5])
-print(merge([20],[19]))
+def sort(lst):
+	if len(lst) == 0 or len(lst) == 1:
+		return (lst,lst,lst,lst)
+	middle = len(lst) // 2
+	if len(lst) == 2:
+		first_half = (lst[:middle], lst[:middle], lst[:middle], lst[:middle])
+		second_half = (lst[middle:], lst[middle:], lst[middle:], lst[middle:])
+		return merge(first_half, second_half)
+	else:
+		first_half = sort(lst[:middle])
+		second_half = sort(lst[middle:])
+		return merge(first_half, second_half)
 
 def mergesort(lst):
-# # """ Function to sort an array using merge sort algorithm """
-    if len(lst) == 0 or len(lst) == 1:
-        print("base case list: " + str(lst))
-        return (lst,lst,lst,lst)
-    else:
-        if len(lst) == 2:
-        	print("base case of 2 elts")
-        	x = lst[:1]
-        	y = lst[1:]
-        	return merge(x, y)
-        else:
-	        middle = len(lst)//2
-	        x = mergesort(lst[:middle])
-	        y = mergesort(lst[middle:])
-	        return merge(x,y)
-	        # longest = answer[1]
-	        # return longest
-# mergesort(x)
-mergesort([20, 21])
+	return sort(lst)[1]
 	
 
