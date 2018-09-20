@@ -80,6 +80,12 @@ def sort(lst):
 def mergesort(lst):
 	longest_list = sort(lst)[1]
 	num_days = len(longest_list)
-	return (longest_list, num_days)
-	
-
+	start = 0
+	for i in range(len(lst)):
+		if lst[i] == longest_list[0]:
+			n = 1
+			while (n < len(longest_list)) and (lst[i+n] == longest_list[n]):
+					n += 1
+					if n == len(longest_list):
+						start = i
+	return (longest_list, num_days, start)
