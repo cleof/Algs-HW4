@@ -67,17 +67,18 @@ def check_ascending(lst):
 	return True
 
 def longest_left(lst):
-	end = 1
+	if len(lst) == 1: return lst
+	end = 0
 	for i in range(len(lst)-1):
-		if lst[i] < lst[i+1]:
-			end+=1
-		else:
-			return lst[0:end]
+		if lst[i] <= lst[i+1]:
+			end = i+2
+	return lst[:end]
 
 def longest_right(lst):
+	if len(lst) == 1: return lst
 	start = len(lst) - 1
-	while start > 0: 
-		if (lst[start] > lst[start-1]):
+	while start >= 0: 
+		if (lst[start] >= lst[start-1]):
 			start = start - 1
 		else:
 			return lst[start:]
@@ -90,8 +91,6 @@ def merge(x, y):
 		return (y, y, y, y)
 	elif y == []: 
 		return (x, x, x, x)
-	# print(x)
-	# print(y)
 	a = x
 	l1 = find_longest(a)
 	lr1 = longest_right(a)
@@ -100,9 +99,6 @@ def merge(x, y):
 	l2 = find_longest(b)
 	lr2 = longest_right(b)
 	ll2 = longest_left(b)
-	print("a: " + str(a))
-	print("b: " + str(b))
-	# print("x: " + str(x) + ", y: " + str(y))
 	c = a + b
 	test = lr1 + ll2 # middle ascending list
 	test = find_longest(test)
@@ -110,38 +106,38 @@ def merge(x, y):
 		longest = l1
 	else:
 		longest = l2
-	# print("l1: " + str(l1))
-	# print("l2: " + str(l2))
-	# print("l1 or l2: " + str(longest))
-	# print("test: " + str(test))
 	if check_ascending(test) and len(test) > len(longest): # if middle list is asscending and longer than longest, update longest
 		longest = test
-	# print("longest after test: " + str(longest))
 	new_lr = longest_right(c)
 	new_ll = longest_left(c)
 
 	return(c, longest, new_lr, new_ll)
 
-g = (x[0:5])
-y = (x[5:8])
+# g = (x[0:5])
+# y = (x[5:8])
 # print("merge g and y: " + str(merge(g,y)))
 # find_longest(x[0:5])
+print(merge([20],[19]))
 
-def mergesort(x):
+def mergesort(lst):
 # # """ Function to sort an array using merge sort algorithm """
-    if (len(x) == 0):
-        print("base case list: " + str(x))
-        return x
+    if len(lst) == 0 or len(lst) == 1:
+        print("base case list: " + str(lst))
+        return (lst,lst,lst,lst)
     else:
-        middle = len(x)//2
-        if middle >= 2:
-	        print("middle: " + str(middle))
-	        x = mergesort(x[:middle])
-	        y = mergesort(x[middle:])
-	        print("merge x and y: " + str(merge(x,y)))
-	        answer = merge(x,y)
+        if len(lst) == 2:
+        	print("base case of 2 elts")
+        	x = lst[:1]
+        	y = lst[1:]
+        	return merge(x, y)
+        else:
+	        middle = len(lst)//2
+	        x = mergesort(lst[:middle])
+	        y = mergesort(lst[middle:])
+	        return merge(x,y)
 	        # longest = answer[1]
 	        # return longest
-mergesort(x)
+# mergesort(x)
+mergesort([20, 21])
 	
 
